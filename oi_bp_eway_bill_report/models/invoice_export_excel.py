@@ -219,61 +219,61 @@ class InvoiceExcelReport(models.Model):
                 row_date_count += 1
 
 
-            row_date_count += 1
-
-            sheet.write(row_date_count, 0, "Si. No", title_style1_table_head_center)
-            sheet.write(row_date_count, 1, "Invoice Number", title_style1_table_head_center)
-            sheet.write(row_date_count, 2, "Invoice Date", title_style1_table_head_center)
-            sheet.write(row_date_count, 3, "Customer Name", title_style1_table_head_center)
-            sheet.write(row_date_count, 4, "HSN Code", title_style1_table_head_center)
-            sheet.write(row_date_count, 5, "Total Qty", title_style1_table_head_center)
-            sheet.write(row_date_count, 6, "Taxable Value", title_style1_table_head_center)
-            # sheet.write(row_date_count, 5, "gstRate", title_style1_table_head_center)
-            # sheet.write(row_date_count, 8, "itemNo ", title_style1_table_head_center)
-            row_date_count += 1
-
-
-            values = []
-            empty = []
-            hsn_Code  = tax = '-'
-            date = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-            browse = self.env['account.invoice'].search([('id', 'in', self.account_ids.ids)])
-            for record in browse:
-                for account in record.invoice_line_ids:
-                    if account.product_id not in empty:
-                        empty.append(account.product_id)
-                for rec in empty:
-                    qty_unit = 0.00
-                    taxable_value = 0.00
-                    for line in record.invoice_line_ids.filtered(lambda l: l.product_id.id == rec.id):
-                        hsn_Code = line.gst_id
-                        qty_unit += line.quantity
-                        taxable_value += line.price_subtotal
-                    pro_line = {
-                        'invoice_date': record.date_invoice,
-                        'invoice_number': record.number,
-                        'customer_name': record.partner_id.name,
-                        'hsn_code' : hsn_Code,
-                        'qty_unit' :qty_unit,
-                        'taxable_value': taxable_value,
-
-                    }
-                    values.append(pro_line)
-
-            for val in values:
-                count += 1
-                sheet.write(row_date_count, 0, (count -2), title_style_left)
-                sheet.write(row_date_count, 1, val['invoice_number'], title_style_left)
-                sheet.write(row_date_count, 2, val['invoice_date'], date)
-                sheet.write(row_date_count, 3, val['customer_name'], title_style_left)
-                sheet.write(row_date_count, 4, val['hsn_code'], title_style_left)
-                sheet.write(row_date_count, 5, val['qty_unit'], title_style_left)
-                sheet.write(row_date_count, 6, val['taxable_value'], title_style_left)
-                row_date_count += 1
+            # row_date_count += 1
+            #
+            # sheet.write(row_date_count, 0, "Si. No", title_style1_table_head_center)
+            # sheet.write(row_date_count, 1, "Invoice Number", title_style1_table_head_center)
+            # sheet.write(row_date_count, 2, "Invoice Date", title_style1_table_head_center)
+            # sheet.write(row_date_count, 3, "Customer Name", title_style1_table_head_center)
+            # sheet.write(row_date_count, 4, "HSN Code", title_style1_table_head_center)
+            # sheet.write(row_date_count, 5, "Total Qty", title_style1_table_head_center)
+            # sheet.write(row_date_count, 6, "Taxable Value", title_style1_table_head_center)
+            # # sheet.write(row_date_count, 5, "gstRate", title_style1_table_head_center)
+            # # sheet.write(row_date_count, 8, "itemNo ", title_style1_table_head_center)
+            # row_date_count += 1
+            #
+            #
+            # values = []
+            # empty = []
+            # hsn_Code  = tax = '-'
+            # date = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+            # browse = self.env['account.invoice'].search([('id', 'in', self.account_ids.ids)])
+            # for record in browse:
+            #     for account in record.invoice_line_ids:
+            #         if account.product_id not in empty:
+            #             empty.append(account.product_id)
+            #     for rec in empty:
+            #         qty_unit = 0.00
+            #         taxable_value = 0.00
+            #         for line in record.invoice_line_ids.filtered(lambda l: l.product_id.id == rec.id):
+            #             hsn_Code = line.gst_id
+            #             qty_unit += line.quantity
+            #             taxable_value += line.price_subtotal
+            #         pro_line = {
+            #             'invoice_date': record.date_invoice,
+            #             'invoice_number': record.number,
+            #             'customer_name': record.partner_id.name,
+            #             'hsn_code' : hsn_Code,
+            #             'qty_unit' :qty_unit,
+            #             'taxable_value': taxable_value,
+            #
+            #         }
+            #         values.append(pro_line)
+            #
+            # for val in values:
+            #     count += 1
+            #     sheet.write(row_date_count, 0, (count -2), title_style_left)
+            #     sheet.write(row_date_count, 1, val['invoice_number'], title_style_left)
+            #     sheet.write(row_date_count, 2, val['invoice_date'], date)
+            #     sheet.write(row_date_count, 3, val['customer_name'], title_style_left)
+            #     sheet.write(row_date_count, 4, val['hsn_code'], title_style_left)
+            #     sheet.write(row_date_count, 5, val['qty_unit'], title_style_left)
+            #     sheet.write(row_date_count, 6, val['taxable_value'], title_style_left)
+            #     row_date_count += 1
             stream = io.BytesIO()
             workbook.save(stream)
             attach_id = self.env['i.excel.output'].create({
                 'name': "Invoice Excel",
-                'filename': base64.encodestring(stream.getvalue())
+                'filename': base64.enream.getvalue()
             })
             return attach_id.download()
